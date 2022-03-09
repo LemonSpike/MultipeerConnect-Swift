@@ -6,14 +6,44 @@
 //
 
 import UIKit
+import MultipeerConnectivity
 
 class ViewController: UIViewController {
 
+  var viewModel = MultipeerViewModel()
+
   override func viewDidLoad() {
     super.viewDidLoad()
-    // Do any additional setup after loading the view.
   }
 
+  override func viewDidAppear(_ animated: Bool) {
+    super.viewDidAppear(animated)
+    joinSession()
+  }
+
+  func joinSession() {
+    let mcBrowser = MCBrowserViewController(serviceType: "hws-kb",
+                                            session: viewModel.mcSession)
+    mcBrowser.delegate = self
+    present(mcBrowser, animated: true)
+  }
 
 }
 
+extension ViewController: MCBrowserViewControllerDelegate {
+
+  func browserViewController(_ browserViewController: MCBrowserViewController,
+                             shouldPresentNearbyPeer peerID: MCPeerID,
+                             withDiscoveryInfo info: [String : String]?) -> Bool {
+    viewModel.devices.append(peerID.displayName)
+    return true
+  }
+
+  func browserViewControllerDidFinish(_ browserViewController: MCBrowserViewController) {
+    dismiss(animated: true)
+  }
+
+  func browserViewControllerWasCancelled(_ browserViewController: MCBrowserViewController) {
+    dismiss(animated: true)
+  }
+}
