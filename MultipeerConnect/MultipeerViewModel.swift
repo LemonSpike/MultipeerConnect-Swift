@@ -35,20 +35,6 @@ class MultipeerViewModel: NSObject {
     self.mcSession.delegate = self
     self.mcAdvertiserAssistant.start()
   }
-
-  func sendServerName(text: String) {
-    if let textData = text.data(using: .utf8),
-        mcSession.connectedPeers.count > 0 {
-      do {
-        try mcSession.send(textData,
-                           toPeers: mcSession.connectedPeers,
-                           with: .reliable)
-      } catch {
-        self.error = MCError
-          .sendError(description: error.localizedDescription)
-      }
-    }
-  }
 }
 
 extension MultipeerViewModel: MCSessionDelegate {

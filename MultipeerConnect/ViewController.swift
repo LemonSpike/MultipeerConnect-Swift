@@ -12,13 +12,18 @@ class ViewController: UIViewController {
 
   var viewModel = MultipeerViewModel()
 
+  // Set this to false for in-store client.
+  var browserMode = false
+
   override func viewDidLoad() {
     super.viewDidLoad()
   }
 
   override func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(animated)
-    joinSession()
+    if browserMode {
+      joinSession()
+    }
   }
 
   func joinSession() {
@@ -27,7 +32,6 @@ class ViewController: UIViewController {
     mcBrowser.delegate = self
     present(mcBrowser, animated: true)
   }
-
 }
 
 extension ViewController: MCBrowserViewControllerDelegate {
